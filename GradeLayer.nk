@@ -1,0 +1,201 @@
+set cut_paste_input [stack 0]
+version 10.0 v6
+push $cut_paste_input
+add_layer {reflect reflect.red reflect.green reflect.blue}
+Group {
+name GradeLayer8
+tile_color 0x5300a5ff
+label "\[value in]"
+selected true
+xpos -3909
+ypos 1231
+addUserKnob {20 User l GradeLayer}
+addUserKnob {41 in l layer T Shuffle1.in}
+addUserKnob {41 output_layer l "output layer" T Merge2.disable}
+addUserKnob {41 blackpoint T Grade1.blackpoint}
+addUserKnob {41 whitepoint T Grade1.whitepoint}
+addUserKnob {41 black l lift T Grade1.black}
+addUserKnob {41 white l gain T Grade1.white}
+addUserKnob {41 multiply T Grade1.multiply}
+addUserKnob {41 add l offset T Grade1.add}
+addUserKnob {41 gamma T Grade1.gamma}
+addUserKnob {41 reverse T Grade1.reverse}
+addUserKnob {41 black_clamp l "black clamp" -STARTLINE T Grade1.black_clamp}
+addUserKnob {41 white_clamp l "white clamp" -STARTLINE T Grade1.white_clamp}
+addUserKnob {41 maskChannelMask l mask T Grade1.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T Grade1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Grade1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Grade1.fringe}
+addUserKnob {41 unpremult l "(un)premult by" T Grade1.unpremult}
+addUserKnob {41 invert_unpremult l invert -STARTLINE T Grade1.invert_unpremult}
+addUserKnob {7 grade_mix l "grade mix"}
+grade_mix 1
+addUserKnob {26 ""}
+addUserKnob {7 mix t "Overall effect mix"}
+mix 1
+addUserKnob {20 cc l ColorCorrect}
+addUserKnob {20 master l "@b;master" n 1}
+addUserKnob {41 saturation T ColorCorrect1.saturation}
+addUserKnob {41 contrast T ColorCorrect1.contrast}
+addUserKnob {41 gamma_1 l gamma T ColorCorrect1.gamma}
+addUserKnob {41 gain T ColorCorrect1.gain}
+addUserKnob {41 offset T ColorCorrect1.offset}
+addUserKnob {20 "" n -1}
+addUserKnob {20 shadows l "@b;shadows" n 1}
+addUserKnob {41 shadows.saturation l saturation T ColorCorrect1.shadows.saturation}
+addUserKnob {41 shadows.contrast l contrast T ColorCorrect1.shadows.contrast}
+addUserKnob {41 shadows.gamma l gamma T ColorCorrect1.shadows.gamma}
+addUserKnob {41 shadows.gain l gain T ColorCorrect1.shadows.gain}
+addUserKnob {41 shadows.offset l offset T ColorCorrect1.shadows.offset}
+addUserKnob {20 "" n -1}
+addUserKnob {20 midtones l "@b;midtones" n 1}
+addUserKnob {41 midtones.saturation l saturation T ColorCorrect1.midtones.saturation}
+addUserKnob {41 midtones.contrast l contrast T ColorCorrect1.midtones.contrast}
+addUserKnob {41 midtones.gamma l gamma T ColorCorrect1.midtones.gamma}
+addUserKnob {41 midtones.gain l gain T ColorCorrect1.midtones.gain}
+addUserKnob {41 midtones.offset l offset T ColorCorrect1.midtones.offset}
+addUserKnob {20 "" n -1}
+addUserKnob {20 highlights l "@b;highlights" n 1}
+addUserKnob {41 highlights.saturation l saturation T ColorCorrect1.highlights.saturation}
+addUserKnob {41 highlights.contrast l contrast T ColorCorrect1.highlights.contrast}
+addUserKnob {41 highlights.gamma l gamma T ColorCorrect1.highlights.gamma}
+addUserKnob {41 highlights.gain l gain T ColorCorrect1.highlights.gain}
+addUserKnob {41 highlights.offset l offset T ColorCorrect1.highlights.offset}
+addUserKnob {20 "" n -1}
+addUserKnob {20 ranges l Ranges n 1}
+ranges 0
+addUserKnob {41 test T ColorCorrect1.test}
+addUserKnob {41 lookup l "" -STARTLINE T ColorCorrect1.lookup}
+addUserKnob {20 endGroup n -1}
+addUserKnob {41 maskChannelMask_1 l mask -STARTLINE T ColorCorrect1.maskChannelMask}
+addUserKnob {41 inject_1 l inject -STARTLINE T ColorCorrect1.inject}
+addUserKnob {41 invert_mask_1 l invert -STARTLINE T ColorCorrect1.invert_mask}
+addUserKnob {41 fringe_1 l fringe -STARTLINE T ColorCorrect1.fringe}
+addUserKnob {41 unpremult_1 l "(un)premult by" T ColorCorrect1.unpremult}
+addUserKnob {41 invert_unpremult_1 l invert -STARTLINE T ColorCorrect1.invert_unpremult}
+addUserKnob {7 cc_mix l mix}
+cc_mix 1
+}
+Input {
+inputs 0
+name cg
+xpos 0
+ypos -29
+}
+Dot {
+name Dot1
+xpos 34
+ypos 37
+}
+set N7f6f7200 [stack 0]
+Shuffle {
+in reflect
+out rgb
+name Shuffle1
+label "\[value in]"
+xpos 0
+ypos 108
+}
+set N8f25c1b0 [stack 0]
+push $N7f6f7200
+Merge2 {
+inputs 2
+operation from
+Achannels rgb
+Bchannels rgb
+output rgb
+name Merge1
+xpos 132
+ypos 114
+}
+Dot {
+name Dot6
+xpos 166
+ypos 251
+}
+Input {
+inputs 0
+name mask
+xpos -126
+ypos -2
+number 1
+}
+push $N7f6f7200
+Switch {
+inputs 2
+which {{"\[exists parent.input1]" i}}
+name Switch1
+xpos -126
+ypos 160
+}
+set Nf0b0b230 [stack 0]
+push $Nf0b0b230
+push $N8f25c1b0
+Grade {
+inputs 1+1
+white 2
+maskChannelMask -rgba.alpha
+mix {{parent.grade_mix i}}
+name Grade1
+xpos 0
+ypos 160
+}
+ColorCorrect {
+inputs 1+1
+maskChannelMask -rgba.alpha
+mix {{parent.cc_mix i}}
+name ColorCorrect1
+xpos 0
+ypos 216
+}
+Shuffle {
+alpha black
+out {{{Shuffle1.in}}}
+name Shuffle2
+label "\[value in] -> \[value out]"
+xpos 0
+ypos 266
+}
+Merge2 {
+inputs 2
+operation plus
+Achannels rgb
+Bchannels rgb
+output rgb
+name Merge2
+xpos 0
+ypos 352
+}
+set N8e416260 [stack 0]
+push $N7f6f7200
+Dot {
+name Dot3
+xpos 248
+ypos 37
+}
+Dot {
+name Dot2
+xpos 248
+ypos 486
+}
+Dissolve {
+inputs 2
+which {{parent.mix i}}
+name Dissolve1
+xpos 0
+ypos 476
+}
+Output {
+name Output1
+xpos 0
+ypos 576
+}
+push $N7f6f7200
+push $N8e416260
+Viewer {
+inputs 2
+name Viewer1
+xpos 209
+ypos 602
+}
+end_group
